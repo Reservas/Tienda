@@ -15,17 +15,12 @@ if(isset($_POST['user']))
         $noexist = true;
             if($result = $stmt->fetchAll()) {
                 foreach($result as $row){
-                    switch($row['status'] ){
-                        case 1:
-                        header("location:./user/inicio.php");
-                        $_SESSION['user'] = $row['user'];
-                         $_SESSION['id'] = $row['id'];
-                        exit();
-                        case 0:
-                        header("location: ./inicio.php");
-                        $_SESSION['error'] = 1;
-                        exit();
-                    }
+                   
+					header("location:./user/inicio.php");
+					$_SESSION['user'] = $row['user'];
+					$_SESSION['id'] = $row['id'];
+            
+                   
                 }
             }else{
 	           header("location: ./inicio.php");

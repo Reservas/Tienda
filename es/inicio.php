@@ -22,9 +22,9 @@ $user_pool = mysql_query("SELECT user FROM cliente");
                           <div class="panel-body">
                             <form action="validate.php" method="post">
                               <label>Usuario</label>
-                              <input type="text"  class="form-control input-sm" id="user" name="user" placeholder="Usuario" autocomplete="off" required  > 
+                              <input type="text"  class="form-control input-sm" id="user" name="user" placeholder="Usuario" autocomplete="off"   > 
                               <label>Contraseña</label>
-                              <input type="password"  class="form-control input-sm" name="pass" placeholder="Contraseña" autocomplete="off" required>
+                              <input type="password"  class="form-control input-sm" id="pass" name="pass" placeholder="Contraseña" autocomplete="off" >
                               <?php
                                 if(isset($_SESSION['error'])) 
                                 {
@@ -48,11 +48,13 @@ function soloNumeros(e){
 	return (key >= 48 && key <= 57)
 }
 </script>
+
                           </div> 
                                             
-                          <div class="panel-footer">
-                              <a><input type="button" id="airlbtn" class="btn btn-success btn-xs" value="Inicio de sesion" style="width:100%;"></a>
-                          </div>
+                          
+                              <a><input type="submit" id="airlbtn" class="btn btn-success btn-xs" value="Inicio de sesion" style="width:100%;"></a>
+                         
+						  </form>
                                </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
                       <div class="panel panel-primary">
@@ -81,7 +83,7 @@ function soloNumeros(e){
                                 <input type="text" class="form-control input-sm" name="apellido" placeholder="Apellido" autocomplete="off" required
                                 onkeypress="return alpha(event)" > 
                                 <label>Dirección</label>
-                                <input type="text" class="form-control input-sm" name="address" placeholder="Dirección" autocomplete="off" required> 
+                                <input type="text" class="form-control input-sm" name="direccion" placeholder="Dirección" autocomplete="off" required> 
                                 <label>Fecha de nacimiento</label>
                                   <script>
                                   function compruebaFecha($date){
@@ -102,15 +104,15 @@ return false;
 return true;
 }
                                   </script>
-                                <input type="date" class="form-control input-sm" name="nac" placeholder="Fecha de nacimient" autocomplete="off" required onkeypress="compruebaFecha"> 
+                                <input type="date" class="form-control input-sm" name="fecha_nac" placeholder="Fecha de nacimient" autocomplete="off" required onkeypress="compruebaFecha"> 
                                 <label>Teléfono</label>
                                   
-                                <input type="text" class="form-control input-sm" name="phone" maxlength="8" placeholder="7*******" autocomplete="off" required
+                                <input type="text" class="form-control input-sm" name="telefono" maxlength="8" placeholder="7*******" autocomplete="off" required
                                 onKeyPress="return soloNumeros(event)"required="" pattern="7[0-9]{7}"> 
                               
 
                                 <label>Correo</label>
-                                <input type="text" class="form-control input-sm" name="mail" placeholder="Correo" autocomplete="off" required> 
+                                <input type="text" class="form-control input-sm" name="email" placeholder="Correo" autocomplete="off" required> 
                                 <label>Categoría</label>
                                 <input type="text" class="form-control input-sm" name="categoria" placeholder="Categoría" autocomplete="off" required> 
 </div>
