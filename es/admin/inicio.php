@@ -21,7 +21,7 @@ function soloNumeros(e){
            <h2 class="text-center" style="color:#0000;">Agregar producto</h2>
         </div>
             <div  class="panel-body">
-        <form name="agregar" action="agregar.php" method="post">
+        <form name="agregar" action="Agregar.php" method="post">
             <div>
                 <label>ID</label>
                 <input type="text" name="id_producto" placeholder="ID del producto" autocomplete="off" required="">
@@ -36,51 +36,38 @@ function soloNumeros(e){
             </div>
             </form>            
         </div>
-           <div>
-               <h2 class="text-center" style="color:#0000;">Edita el producto</h2>
-               
-               <div>
-               <form name="edit" action="modificar.php" method="post">
-                   <div>
-                   <label>Nombre</label>
-                       <input type="text" name="name" placeholder="Edite el nombre del producto" autocomplete="off" required>
-                   <label>Precio</label>
-                       <input type="text" name="precio" placeholder="Edite el precio del producto" autocomplete="off" onKeyPress="return soloNumeros(event)" required>
-                       <label>Cantidad</label>
-                       <input type="text" name="stock" placeholder="Edite la cantidad del producto" autocomplete="off" onKeyPress="return soloNumeros(event)" required="">
-                       
-                       <input type="submit" class="btn btn-success form-control btn-sm" value="Modificar">
-                       
-                   </div>
-                   </form>
-               </div>
-            </div>
-           <div> 
-               <h2 class="text-center" style="color:#0000;">Elimine un producto</h2>
-               <div>
-               <form name="eliminar" action="eliminar.php" method="post">
-                   <div>
-                   <label>Nombre</label>
-                       <input type="text" name="name" placeholder="Escribe el  nombre del producto que desea eliminar" autocomplete="om"  required>
-                   
-                   
-                   <input type="submit" class="btn btn.success form-control btn-sm" value="Eliminar">
-                   </div>
-                   </form>
-               </div>
-        </div>
+           
+           
           <div>
            <h2 class="text-center" style="color:#0000;">Lista de productos</h2>
            </div> 
            <div>
-           <form name="mostrar" action="mostrar.php" method="post">
-               <div>
-               <label>Nombre</label>
-                   <input type="list" name="name" autocomplete="off" required>
-                   
-               </div>
-               
-               </form>
+           <?php
+include "../conexion.php";
+$query = "SELECT `id_producto`, `nombre`, `precio`, `stock` FROM `producto` WHERE 1";
+$resultado = mysql_query($query, $link);
+$total = mysql_num_rows($resultado);
+if($total>0)
+{
+?>
+        <table class="table table-striped">
+            <thead><tr><td>ID</td><td>Nombre del producto</td><td>Precio</td><td>Existencia</td></tr></thead><tbody>          
+<?php
+    while($row = mysql_fetch_array($resultado))
+	{
+        echo "<tr><td>".$row['id_producto']."</td>";
+        echo "<td>".$row['nombre']."</td>";
+        echo "<td>".$row['precio']."</td>";
+		echo "<td>".$row['stock']."</td>";
+        echo "<td><a href='modificar.php?id_producto=".$row['id_producto']."'><span class='glyphicon glyphicon-cog' aria-hidden='true'></span>  Editar</a> <a href='eliminar.php?id_producto=".$row['id_producto']."' class='text-danger'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>  Borrar</a></td></tr> \n";
+    }
+} 
+else
+{
+    echo "<p class='text-danger text-center'>Error: la base de datos esta vacia </p>";
+}
+?>
+		   
            </div>
 </div>
         </div>
