@@ -3,9 +3,6 @@
     $username = 'root';
     $password = '';
     $database = 'tienda';
-    $link=mysql_connect($hostname,$username,$password);
-	if($link){
-		mysql_select_db($database,$link);	
-	}	 
-    $mysqli = new mysqli($hostname, $username, $password, $database);
+    $conexion = mysqli_connect($hostname, $username, $password);
+    mysqli_select_db($conexion, $database);
 ?>
