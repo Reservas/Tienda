@@ -16,7 +16,7 @@ if(isset($_POST['user']))
             if($result = $stmt->fetchAll()) {
                 foreach($result as $row){
 
-					header("location:./user/inicio.php");
+					header("location:./cliente/index.php");
 					$_SESSION['user'] = $row['user'];
 					$_SESSION['id'] = $row['id'];
 
