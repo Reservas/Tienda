@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.3.11
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2015 a las 22:56:45
--- Versión del servidor: 5.6.24
--- Versión de PHP: 5.6.8
+-- Host: 127.0.0.1
+-- Generation Time: Nov 16, 2015 at 05:55 AM
+-- Server version: 5.6.17
+-- PHP Version: 5.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,25 +17,26 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `tienda`
+-- Database: `tienda`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `admin`
+-- Table structure for table `admin`
 --
 
 CREATE TABLE IF NOT EXISTS `admin` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(50) NOT NULL,
   `pass` varchar(32) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `telefono` varchar(9) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `telefono` varchar(9) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Volcado de datos para la tabla `admin`
+-- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`id`, `user`, `pass`, `nombre`, `telefono`) VALUES
@@ -44,7 +45,27 @@ INSERT INTO `admin` (`id`, `user`, `pass`, `nombre`, `telefono`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cliente`
+-- Table structure for table `cart`
+--
+
+CREATE TABLE IF NOT EXISTS `cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) NOT NULL,
+  `producto` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user`, `producto`) VALUES
+(1, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cliente`
 --
 
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -57,11 +78,13 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `fecha_nac` date NOT NULL,
   `telefono` varchar(9) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `categoriia` varchar(50) NOT NULL
+  `categoriia` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_cliente`),
+  UNIQUE KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `cliente`
+-- Dumping data for table `cliente`
 --
 
 INSERT INTO `cliente` (`id_cliente`, `user`, `pass`, `nombre`, `apellido`, `direccion`, `fecha_nac`, `telefono`, `email`, `categoriia`) VALUES
@@ -70,7 +93,7 @@ INSERT INTO `cliente` (`id_cliente`, `user`, `pass`, `nombre`, `apellido`, `dire
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalle`
+-- Table structure for table `detalle`
 --
 
 CREATE TABLE IF NOT EXISTS `detalle` (
@@ -78,93 +101,56 @@ CREATE TABLE IF NOT EXISTS `detalle` (
   `id_factura` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
   `cantidad` varchar(59) NOT NULL,
-  `precio` float NOT NULL
+  `precio` float NOT NULL,
+  PRIMARY KEY (`num_detalle`),
+  UNIQUE KEY `id_factura` (`id_factura`),
+  UNIQUE KEY `id_producto` (`id_producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura`
+-- Table structure for table `factura`
 --
 
 CREATE TABLE IF NOT EXISTS `factura` (
   `num_factura` int(11) NOT NULL,
   `id_cliente` int(11) NOT NULL,
-  `fecha` date NOT NULL
+  `fecha` date NOT NULL,
+  PRIMARY KEY (`num_factura`),
+  UNIQUE KEY `id_cliente` (`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `producto`
+-- Table structure for table `producto`
 --
 
 CREATE TABLE IF NOT EXISTS `producto` (
-  `id_producto` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(30) NOT NULL,
   `precio` float NOT NULL,
-  `stock` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `stock` varchar(10) NOT NULL,
+  PRIMARY KEY (`id_producto`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
--- Índices para tablas volcadas
+-- Dumping data for table `producto`
 --
 
---
--- Indices de la tabla `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `cliente`
---
-ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`id_cliente`), ADD UNIQUE KEY `user` (`user`);
-
---
--- Indices de la tabla `detalle`
---
-ALTER TABLE `detalle`
-  ADD PRIMARY KEY (`num_detalle`), ADD UNIQUE KEY `id_factura` (`id_factura`), ADD UNIQUE KEY `id_producto` (`id_producto`);
-
---
--- Indices de la tabla `factura`
---
-ALTER TABLE `factura`
-  ADD PRIMARY KEY (`num_factura`), ADD UNIQUE KEY `id_cliente` (`id_cliente`);
-
---
--- Indices de la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD PRIMARY KEY (`id_producto`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `detalle`
---
-ALTER TABLE `detalle`
-ADD CONSTRAINT `detalle_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
-
---
--- Filtros para la tabla `factura`
---
-ALTER TABLE `factura`
-ADD CONSTRAINT `factura_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
-ADD CONSTRAINT `factura_ibfk_2` FOREIGN KEY (`num_factura`) REFERENCES `detalle` (`id_factura`) ON DELETE CASCADE ON UPDATE CASCADE;
+INSERT INTO `producto` (`id_producto`, `nombre`, `precio`, `stock`) VALUES
+(2, 'Laptop', 200, '40'),
+(3, 'Audifonos', 20, '100'),
+(4, 'Telefono', 4, '25'),
+(5, 'Bocina', 1.5, '15'),
+(6, 'Tablet', 300, '60'),
+(7, 'HDMI', 4, '200'),
+(8, 'Memoria SD', 2, '100'),
+(9, 'Smart watch', 240, '65'),
+(10, 'USB', 15, '400'),
+(12, 'cvbnm,', 250, '25'),
+(13, 'PlayStation', 250, '20');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

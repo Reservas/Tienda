@@ -6,7 +6,7 @@ if(isset($_POST['user']))
 {
     try
     {
-        
+
         $db = new PDO("mysql:host=". $hostname . ";dbname=$database", $username, $password);
         $stmt = $db->prepare("SELECT * FROM `admin` WHERE `user`  = :user AND `pass` = :pass");
         $stmt->bindParam(':user',$_POST['user'], PDO::PARAM_STR);
@@ -15,20 +15,20 @@ if(isset($_POST['user']))
         $noexist = true;
             if($result = $stmt->fetchAll()) {
                 foreach($result as $row){
-                   
-					header("location:./admin/inicio.php");
+
+					header("location:./admin/index.php");
 					$_SESSION['user'] = $row['user'];
 					$_SESSION['id'] = $row['id'];
-            
-                   
+
+
                 }
             }else{
-	           header("location: ./inicio.php");
+	           header("location: ./index.php");
                $_SESSION['error'] = 1;
 	           exit();
             }
-        
-        $db = null; 
+
+        $db = null;
     }
     catch(PDOException $e){
         echo $e->getMessage();

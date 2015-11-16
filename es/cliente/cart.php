@@ -1,7 +1,40 @@
 <?php
  session_start();
  include "../conexion.php";
-?>
+if(isset($_GET["id_producto"]))
+{
+
+    $idr = $_GET["id_producto"];
+
+      $db = new PDO("mysql:host=". $hostname . ";dbname=". $database, $username, $password);
+      //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $stmt = $db->prepare("INSERT INTO cart VALUES(NULL,:user, :producto)");
+      $stmt->bindParam(':user',$_SESSION['id'], PDO::PARAM_STR);
+      $stmt->bindParam(':producto',$idr, PDO::PARAM_STR);
+      $stmt->execute();
+  }elseif (isset($_GET["cmd"]) && isset($_GET["id"])) {
+    $idr=$_GET["id"];
+    $query2 = "DELETE FROM cart WHERE id = '$idr'";
+    $resultado2 = mysqli_query($conexion,$query2);
+    if($resultado2)
+    {
+        echo "<script>alert('El producto se  elimino exitosamente')</script>";
+echo"<script>location.href='index.php'</script>";
+    }
+  }
+  else{
+
+    if(isset($_SESSION['id'])) {
+      $nohayCompras = 1;
+    }
+    else {
+      # code...
+      $nohayCompras = 0;
+    }
+
+
+  }
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,9 +82,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                     </li>
-                    <li><a href="logout.php">Logout</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -98,26 +130,29 @@
 
                 <div class="row">
 <?php
-$query = "SELECT `id_producto`, `nombre`, `precio`, `stock` FROM `producto` WHERE 1";
-$resultado = mysqli_query($conexion,$query);
-$total = mysqli_num_rows($resultado);
-while($row = mysqli_fetch_array($resultado))
-{
+if ($nohayCompras==0) {
+  echo "<h1>No hay productos agregados</h1>";
+}
+else {
+  $query = "SELECT a.id,a.producto,b.id_producto,b.nombre FROM `cart` a join `producto` b on a.producto=b.id_producto WHERE user=".$_SESSION['id'];
+  $resultado = mysqli_query($conexion,$query);
+  $total = mysqli_num_rows($resultado);
+  while($row = mysqli_fetch_array($resultado))
+  {
+
+
 
 ?>
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
                             <img src="http://placehold.it/320x150" alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$ <?php echo number_format($row['precio'],2)?></h4>
-                                <h4><a href="#"><?php echo $row['nombre'];?></a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <a href='cart.php?id_producto=<?php echo $row["id_producto"]?>'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>  Comprar</a>
+                                <h4><a href="#"><?php echo $row['nombre'];?></a></h4>
+                                <a href='cart.php?cmd=eliminar&id=<?php echo $row['id'] ?>'><span class='glyphicon glyphicon-erase' aria-hidden='true'></span>Eliminar</a>
                             </div>
                         </div>
                     </div>
-<?php }?>
+<?php }}?>
                 </div>
 
             </div>

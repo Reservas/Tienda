@@ -18,7 +18,7 @@ if(isset($_POST['user']))
 
 					header("location:./cliente/index.php");
 					$_SESSION['user'] = $row['user'];
-					$_SESSION['id'] = $row['id'];
+					$_SESSION['id'] = $row['id_cliente'];
 
 
                 }
