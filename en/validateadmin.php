@@ -6,19 +6,19 @@ if(isset($_POST['user']))
 {
     try
     {
-        //$md5 = md5($_POST['pass']);
+
         $db = new PDO("mysql:host=". $hostname . ";dbname=$database", $username, $password);
-        $stmt = $db->prepare("SELECT * FROM `cliente` WHERE `user`  = :user AND `pass` = :pass");
+        $stmt = $db->prepare("SELECT * FROM `admin` WHERE `user`  = :user AND `pass` = :pass");
         $stmt->bindParam(':user',$_POST['user'], PDO::PARAM_STR);
-        $stmt->bindParam(':pass',$_POST['pass'], PDO::PARAM_STR);
+        $stmt->bindParam(':pass', $_POST['pass'], PDO::PARAM_STR);
         $stmt->execute();
         $noexist = true;
             if($result = $stmt->fetchAll()) {
                 foreach($result as $row){
 
-					header("location:./cliente/index.php");
+					header("location:./admin/index.php");
 					$_SESSION['user'] = $row['user'];
-					$_SESSION['id'] = $row['id_cliente'];
+					$_SESSION['id'] = $row['id'];
 
 
                 }
