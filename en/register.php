@@ -1,49 +1,74 @@
-<?php
-    require_once 'conexion.php';
-    if(isset($_POST['user'],$_POST['pass'],$_POST['nombre'],$_POST['apellido'],$_POST['direccion'],$_POST['fecha_nac'],$_POST['telefono'],$_POST['email'],$_POST['categoria'])) 
-    {
-        if(!empty($_POST['user']) and !empty($_POST['pass']) and !empty($_POST['nombre']) and !empty($_POST['apellido']) and !empty($_POST['direccion']) and !empty($_POST['fecha_nac']) and !empty($_POST['telefono']) and !empty($_POST['email']) and !empty($_POST['categoria'])) 
-        {
-            $user = $_POST['user'];
-            $pass = $_POST['pass'];
-            $md5 = md5($_POST['pass']);
-            $nombre = $_POST['nombre'];
-            $apellido = $_POST['apellido'];
-            $direccion = $_POST['direccion'];
-            $fecha_nac = $_POST['fecha_nac'];
-            $telefono = $_POST['telefono'];
-            $email = $_POST['email'];
-            $categoria = $_POST['categoria'];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="" />
+    <title>ExamenViolacion</title>
+    <link href="../en/bootstrap/css/bootstrap.css" rel="stylesheet" />
 
-            $checkuser=mysql_query("SELECT * FROM costumers WHERE user='$user'",$link);
-            $check_user=mysql_num_rows($checkuser);
-                    if($check_user>0){
-                        echo '<script language="javascript">alert("ERROR! El usuario ya existe")</script>';
-                        echo"<script>location.href='inicio.php'</script>";
-                    }
-                        {
-                            $db = new PDO("mysql:host=". $hostname . ";dbname=". $database, $username, $password);
-                            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $stmt = $db->prepare("INSERT INTO costumers VALUES('', :user, :pass, :nombre, :apellido, :direccion, :fecha_nac, :telefono, :email, :categoria,)"); 
-                            $stmt->bindParam(':user',$name, PDO::PARAM_STR);
-                            $stmt->bindParam(':pass',$address, PDO::PARAM_STR);
-                            $stmt->bindParam(':nombre',$city, PDO::PARAM_STR);
-                            $stmt->bindParam(':apellido',$state, PDO::PARAM_STR);
-                            $stmt->bindParam(':direccion',$email, PDO::PARAM_STR);
-                            $stmt->bindParam(':fecha_nac',$nac, PDO::PARAM_STR);
-                            $stmt->bindParam(':telefono',$phone, PDO::PARAM_STR);
-                            $stmt->bindParam(':email',$user, PDO::PARAM_STR);
-                            $stmt->bindParam(':categoria',$md5, PDO::PARAM_STR);
-                            $stmt->execute();
-                            echo "<script>alert('El usuario registrado exitosamente')</script>";
-                            echo"<script>location.href='inicio.php'</script>";
-                        }{
-                            echo $e->getMessage();
-                        }
-                    }
-                }else{
-                    echo '<script language="javascript">alert("La contraseña es incorrecta")</script>';
-                    echo"<script>location.href='index.php'</script>";
-                }
+</head>
+<body>
+    <section>
+            <div class="row">
+<div class="col-md-offset-4 col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h2 class="text-center" style="color:#fff;">Register</h2>
+      </div>
+      <div class="panel-body">
+        <form name="register" action="registerPOST.php" method="post">
+          <div class="col-md-offset-0 col-md-12">
+            <label>Username</label>
+            <input type="text" class="form-control input-sm" name="user" placeholder="Username" autocomplete="off" required >
+            <label>Password</label>
+            <input type="password" class="form-control input-sm" name="pass" placeholder="Password" autocomplete="off" required pattern=".{6,12}"   required title="6 caractères como mìnimo ">
+                <label>Name</label>
+            <input type="text" class="form-control input-sm" name="nombre" placeholder="Name" autocomplete="off" required
+            onkeypress="return alpha(event)" >
+            <label>Last name</label>
+            <input type="text" class="form-control input-sm" name="apellido" placeholder="Last bane" autocomplete="off" required
+            onkeypress="return alpha(event)" >
+            <label>Address</label>
+            <input type="text" class="form-control input-sm" name="Address" placeholder="Dirección" autocomplete="off" required>
+            <label>Birthday</label>
+              <script>
+              function compruebaFecha($date){
+if ($date == "" || $date == "dd/mm/aaaa")
+return false;
+if (!ereg("^([[:digit:]]{2})/([[:digit:]]{2})/([[:digit:]]{4})$", $date, $vec))
+return false;
+else{
+if ($vec[1] <= 31)
+return false;
+if ($vec[2] <= 12)
+return false;
+//if ($vec[3] <= date("Y") + 1)
+//return false;
+if ($date != date("d/m/Y",mktime(0,0,0, $vec[2], $vec[1], $vec[3])))
+return false;
+}
+return true;
+}
+              </script>
+            <input type="date" class="form-control input-sm" name="fecha_nac" placeholder="Birthday" autocomplete="off" required onkeypress="compruebaFecha">
+            <label>Telephone</label>
 
-?>
+            <input type="text" class="form-control input-sm" name="telefono" maxlength="8" placeholder="7*******" autocomplete="off" required
+            onKeyPress="return soloNumeros(event)"required="" pattern="7[0-9]{7}">
+
+
+            <label>E-mail</label>
+            <input type="text" class="form-control input-sm" name="email" placeholder="E-mail" autocomplete="off" required>
+            <label>Category</label>
+            <input type="text" class="form-control input-sm" name="categoria" placeholder="Category" autocomplete="off" required>
+</div>
+      </div>
+      <div class="panel-footer">
+          <input type="submit" class="btn btn-success form-control btn-sm" value="Register">
+        </form>
+      </div>
+    </div>
+</div>
+<script src="../en/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
