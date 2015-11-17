@@ -1,6 +1,9 @@
 <?php
  session_start();
  include "../conexion.php";
+ $query = "SELECT a.id,a.producto,b.id_producto,b.nombre FROM `cart` a join `producto` b on a.producto=b.id_producto WHERE user=".$_SESSION['id'];
+ $resultado = mysqli_query($conexion,$query);
+ $total = mysqli_num_rows($resultado);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +23,7 @@
 
     <!-- Custom CSS -->
     <link href="../bootstrap/css/shop-homepage.css" rel="stylesheet">
+    <link href="../assets/css/sweet-alert.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -43,13 +47,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ShoppingCart</a>
+                <a class="navbar-brand" href="index.php">ShoppingCart</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                        <a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"><?php echo isset($total) ? $total : '0';?></span></a>
                     </li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
@@ -113,7 +117,7 @@ while($row = mysqli_fetch_array($resultado))
                                 <h4><a href="#"><?php echo $row['nombre'];?></a>
                                 </h4>
                                 <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <a href='cart.php?id_producto=<?php echo $row["id_producto"]?>'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>  Comprar</a>
+                                <a href='#' onclick="agregar('cart.php?id_producto=<?php echo $row["id_producto"]?>',event);"><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>  Comprar</a>
                             </div>
                         </div>
                     </div>
@@ -148,6 +152,21 @@ while($row = mysqli_fetch_array($resultado))
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/js/sweet-alert.min.js"></script>
+    <script>
+    function agregar(url,e) {
+      e.preventDefault();
+      $.ajax({
+        type: "GET",
+        url: url,
+        success:function(data) {
+        swal("Buen Trabajo", "Articulo agregado al carrito de compra", "success")
+        }
+      });
+      // body...
+    }
+    </script>
+
 
 </body>
 

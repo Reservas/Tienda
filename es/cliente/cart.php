@@ -23,9 +23,12 @@ echo"<script>location.href='index.php'</script>";
     }
   }
   else{
-
+    $query = "SELECT a.id,a.producto,b.id_producto,b.nombre FROM `cart` a join `producto` b on a.producto=b.id_producto WHERE user=".$_SESSION['id'];
+    $resultado = mysqli_query($conexion,$query);
+    $total = mysqli_num_rows($resultado);
     if(isset($_SESSION['id'])) {
       $nohayCompras = 1;
+
     }
     else {
       # code...
@@ -76,14 +79,15 @@ echo"<script>location.href='index.php'</script>";
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ShoppingCart</a>
+                <a class="navbar-brand" href="index.php">ShoppingCart</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
-                    </li>
+                  <li>
+                      <a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"><?php echo isset($total) ? $total : '0';?></span></a>
+                  </li>
+                  <li><a href="logout.php">Logout</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
