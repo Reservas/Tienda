@@ -8,9 +8,12 @@ if(isset($_GET["id_producto"]))
 
       $db = new PDO("mysql:host=". $hostname . ";dbname=". $database, $username, $password);
       //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $stmt = $db->prepare("INSERT INTO cart VALUES(NULL,:user, :producto)");
+      $stmt = $db->prepare("INSERT INTO cart VALUES(NULL,:user, :producto, :cantidad)");
       $stmt->bindParam(':user',$_SESSION['id'], PDO::PARAM_STR);
       $stmt->bindParam(':producto',$idr, PDO::PARAM_STR);
+	  //Cambiar por input de usuario
+	  $cantidad = 4;
+	  $stmt->bindParam(':cantidad',$cantidad, PDO::PARAM_STR);
       $stmt->execute();
   }elseif (isset($_GET["cmd"]) && isset($_GET["id"])) {
     $idr=$_GET["id"];
@@ -156,7 +159,12 @@ else {
                             </div>
                         </div>
                     </div>
-<?php }}?>
+<?php }?>
+
+ <input type="button" id="compra" class="btn btn-success" value="Comprar todo" onclick="comprar();">
+
+
+<?php }?>
                 </div>
 
             </div>
@@ -181,6 +189,27 @@ else {
 
     </div>
     <!-- /.container -->
+	<script type="text/javascript" >
+
+	function comprar(){
+	
+		$.ajax({
+			type : "GET",
+			dataType : 'text',
+			async : true,
+			url: "compra.php",
+			success: function(data){
+				if(data=="OK"){
+					location.href='index.php';
+				}else{
+					alert("ocurrio un error al comprar");
+				}
+				
+		}});
+		
+	
+	}
+	</script>
 
     <!-- jQuery -->
     <script src="../bootstrap/js/jquery.js"></script>
